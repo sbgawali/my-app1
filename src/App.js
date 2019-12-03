@@ -1,25 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import data from './appData.json'
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
+import data from './appData.json';
 import Container from '@material-ui/core/Container';
 import CourseList from './CourseList';
 import SearchBar from './SearchBar';
 import CartBadge from './CartBadge';
+import LoginDialog from './LoginDialog';
 export default class App extends React.Component{
   constructor(){
     super()
-    this.state={data:Object.values(data).shift().lessons,initialData:Object.values(data).shift().lessons,cartCount:0}
+    this.state={
+      data:Object.values(data).shift().lessons,
+      initialData:Object.values(data).shift().lessons,
+      cartCount:0,
+      loggedIn:false,
+      openDialog:false
+    };
     this.searchCourse=this.searchCourse.bind(this);
     this.changeCartValue=this.changeCartValue.bind(this);
+    this.checkLogin=this.checkLogin.bind(this);
+    this.closeLoginDialog=this.closeLoginDialog.bind(this);
+    
   }
-  searchCourse(searchVal){     
-     if(searchVal){
-       //let filteredData = this.state.initialData.filter((element)=>element.name==searchVal);
-       this.setState({data:this.state.initialData.filter((element)=>element.name==searchVal)});
-     }
+  checkLogin(){
+    this.setState({loggedIn:true});
+  }
+  searchCourse(searchVal){  
+    let initialdata = this.state.initialData;
+     let filteredData = searchVal ? initialdata.filter((element)=>element.name==searchVal) : initialdata;
+     this.setState({data:filteredData});
   }
   changeCartValue(lesson,index,type){
     let changedData = this.state.initialData;    
@@ -28,6 +37,14 @@ export default class App extends React.Component{
       return n + (lesson.cartEntry == true);
     }, 0);
     this.setState({initialData:changedData,cartCount:cartCount});
+    if(!this.state.loggedIn && !this.state.openDialog){
+      this.checkLogin();
+      this.setState({openDialog:true});
+
+    }
+  }
+  closeLoginDialog(){
+    this.setState({openDialog:false});
   }
   render()
   {
@@ -38,12 +55,17 @@ export default class App extends React.Component{
     let cartCount = this.state.cartCount;
     return (
       <React.Fragment>
-        <div style={{float:'right'}}> <CartBadge style={{float:'right'}} cartCount={cartCount}/></div>
+        <Container >
+        <div style={{float:'right'}}> 
+          <CartBadge style={{float:'right'}} cartCount={cartCount}/>
+        </div>
+        <LoginDialog closeLoginDialog={this.closeLoginDialog} {...this.state} />
+        <h2>Course Details</h2>
         <SearchBar lessons={initialdata} onChangeCallBck={this.searchCourse}/>
         <Container >
           <CourseList  lessons={lessons} changeCartValue={this.changeCartValue}/>
         </Container>
-       
+        </Container >
      </React.Fragment>
     );
   }

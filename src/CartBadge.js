@@ -1,11 +1,7 @@
 import React from 'react';
-import Badge from '@material-ui/core/Badge';
-import Box from '@material-ui/core/Box';
-import Avatar from '@material-ui/core/Avatar';
+import {Box,Badge,IconButton} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-
 const StyledBadge1 = withStyles(theme => ({
   badge: {
     right: -3,

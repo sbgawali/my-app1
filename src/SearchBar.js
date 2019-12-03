@@ -2,34 +2,31 @@
 import React, {Component} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-
 export default class SearchBar extends Component{
   render ()
   {
-    let onChange = (e,val)=>{
-     // console.log('onchange');
-      this.props.onChangeCallBck(val)
+    let onChange = (e,val)=>{      
+      this.props.onChangeCallBck(val ? val.name : null)
     };
     const{ lessons } = this.props;
+    const dd = {
+      options: lessons,
+      getOptionLabel: option => option.name,
+    };  
     return (    
       <div style={{ width: 300 }}>      
-        <Autocomplete
-          freeSolo
-          id="free-solo-2-demo"
-          disableClearable
-          options={lessons.map(option => option.name)}
-          onChange={onChange}
-          renderInput={params => (
-            <TextField
-              {...params}
-              label="Search input"
-              margin="normal"
-              variant="outlined"
-              fullWidth
-              InputProps={{ ...params.InputProps, type: 'search' }}
-            />
-          )}
-        />
-      </div>);
+      <Autocomplete
+        {...dd}
+        id="auto-complete"
+        autoComplete
+        onChange={onChange}
+        includeInputInList
+        renderInput={params => (
+          <TextField {...params} label="Search Course" margin="normal" fullWidth />
+        )}
+      />
+      </div>    
+      
+    );
   }
 }
