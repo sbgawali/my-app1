@@ -4,8 +4,11 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.7.1",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.34",
     "autobind-decorator": "^2.4.0",
     "react": "^16.12.0",
+    "react-autocomplete": "^1.8.1",
     "react-dom": "^16.12.0",
     "react-scripts": "3.2.0"
   },
