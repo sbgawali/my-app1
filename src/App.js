@@ -4,6 +4,7 @@ import data from './appData.json';
 import Container from '@material-ui/core/Container';
 import CourseList from './CourseList';
 import SearchBar from './SearchBar';
+import SortField from './SortField';
 import CartBadge from './CartBadge';
 import LoginDialog from './LoginDialog';
 export default class App extends React.Component{
@@ -17,6 +18,7 @@ export default class App extends React.Component{
       openDialog:false
     };
     this.searchCourse=this.searchCourse.bind(this);
+    this.sortCourse=this.sortCourse.bind(this);
     this.changeCartValue=this.changeCartValue.bind(this);
     this.checkLogin=this.checkLogin.bind(this);
     this.closeLoginDialog=this.closeLoginDialog.bind(this);
@@ -27,8 +29,22 @@ export default class App extends React.Component{
   }
   searchCourse(searchVal){  
     let initialdata = this.state.initialData;
-     let filteredData = searchVal ? initialdata.filter((element)=>element.name==searchVal) : initialdata;
-     this.setState({data:filteredData});
+    let filteredData = searchVal ? initialdata.filter((element)=>element.name==searchVal) : initialdata;
+    this.setState({data:filteredData});
+  }
+  sortCourse(sortBy){  
+ 
+    function sortData(a,b) {
+      var time1 = parseFloat(a[sortBy].replace(':','.').replace(/[^\d.-]/g, ''));
+      var time2 = parseFloat(b[sortBy].replace(':','.').replace(/[^\d.-]/g, ''));
+      if(a[sortBy].match(/.*pm/)) time1 += 12; if(b[sortBy].match(/.*pm/)) time2 += 12;
+      if (time1 < time2) return -1;
+      if (time1 > time2) return 1;
+      return 0;
+    }   
+    let sortedData = this.state.data.sort(sortData);
+
+    this.setState({data:sortedData});
   }
   changeCartValue(lesson,index,type){
     let changedData = this.state.initialData;    
@@ -62,6 +78,7 @@ export default class App extends React.Component{
         <LoginDialog closeLoginDialog={this.closeLoginDialog} {...this.state} />
         <h2>Course Details</h2>
         <SearchBar lessons={initialdata} onChangeCallBck={this.searchCourse}/>
+        <SortField lessons={initialdata} onChangeCallBck={this.sortCourse}/>
         <Container >
           <CourseList  lessons={lessons} changeCartValue={this.changeCartValue}/>
         </Container>

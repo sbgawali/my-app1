@@ -14,7 +14,7 @@ export default class SearchBar extends Component{
       getOptionLabel: option => option.name,
     };  
     return (    
-      <div style={{ width: 300 }}>      
+      <div style={{ width: 300 ,display:'inline-block'}}>      
       <Autocomplete
         {...dd}
         id="auto-complete"
